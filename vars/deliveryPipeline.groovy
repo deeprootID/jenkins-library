@@ -40,7 +40,7 @@ def call(Map param){
 					expression { param.agent == 'dockerworker' }
 				}
 				steps {
-					sh "docker run -p ${param.appname}"
+					sh "docker run -p 8080:8181 ${param.appname}"
 				}
 			}
 			stage('Run app in VM') {
