@@ -4,7 +4,7 @@
 def call(Map param){
 	pipeline {
 		agent {
-			label "${param.agent}"
+			label "'${param.agent}'"
 		}
 		stages {
 			stage ("telegram notif"){
