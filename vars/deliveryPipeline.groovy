@@ -48,7 +48,7 @@ def call(Map param){
 					expression { param.agent == 'vmworker' }
 				}
 				steps {
-					sh "java -jar ${param.appname}.jar"
+					sh "java -jar target/${param.appname}.jar"
 				}
 			}
 		}
