@@ -29,7 +29,7 @@ def call(Map param){
 			}
 			stage('Build docker image') {
 				when {
-					expression { params.agent == 'dockerworker' }
+					expression { param.agent == 'dockerworker' }
 				}
 				steps {
 					sh "docker build -t ${param.appname} ."
@@ -37,7 +37,7 @@ def call(Map param){
 			}
 			stage('Run app in docker container') {
 				when {
-					expression { params.agent == 'dockerworker' }
+					expression { param.agent == 'dockerworker' }
 				}
 				steps {
 					sh "docker run -p ${param.appname}"
@@ -45,7 +45,7 @@ def call(Map param){
 			}
 			stage('Run app in VM') {
 				when {
-					expression { params.agent == 'vmworker' }
+					expression { param.agent == 'vmworker' }
 				}
 				steps {
 					sh "java -jar ${param.appname}.jar"
