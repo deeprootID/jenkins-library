@@ -4,12 +4,12 @@
 def call(Map param){
 	pipeline {
 		agent {
-			label "dockerworker"
+			label "${param.agent}"
 		}
 		stages {
 			stage ("telegram notif"){
 				steps{
-					echo "${getMessage()} ${param.text}"
+					echo "${getMessage()}"
 				}
 			}
 			stage('Build') {
@@ -27,8 +27,36 @@ def call(Map param){
 					}
 				}
 			}
+			stage('Build docker image') {
+				when {
+					expression { params.agent == 'dockerworker' }
+				}
+				steps {
+					sh "docker build -t ${param.appname} ."
+				}
+			}
+			stage('Run app in docker container') {
+				when {
+					expression { params.agent == 'dockerworker' }
+				}
+				steps {
+					sh "docker run -p ${param.appname}"
+				}
+			}
+			stage('Run app in VM') {
+				when {
+					expression { params.agent == 'vmworker' }
+				}
+				steps {
+					sh "java -jar ${param.appname}.jar"
+				}
+			}
 		}
-
+		post {
+			always {
+				deleteDir()
+			}
+		}
     }
 }
 
